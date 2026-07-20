@@ -22,254 +22,214 @@
 
     --good: #7fe3ac;
     --bad:  #f28b8b;
+
     --ease: cubic-bezier(.2,.7,.3,1);
   }
 
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; height:100%; }
-  body{ overflow-x:hidden; overflow-y:auto; }
+  html,body{ margin:0; padding:0; height:100%; background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; }
 
-  /* ---------- background ---------- */
-  .bg{ position:fixed; inset:0; z-index:0; pointer-events:none; }
-  .bg .wash{
-    position:absolute; inset:0;
-    background:
-      radial-gradient(60% 40% at 15% 0%, rgba(167,139,250,.10), transparent 60%),
-      radial-gradient(50% 40% at 100% 100%, rgba(167,139,250,.07), transparent 60%),
-      var(--bg);
+  body{
+    min-height:100dvh; overflow-x:hidden; position:relative;
+    display:flex; flex-direction:column; align-items:center;
   }
-  .bg .grid{
-    position:absolute; inset:0;
+
+  /* ---------- ambient background ---------- */
+  .veil{ position:fixed; inset:0; z-index:0; pointer-events:none; background:var(--bg); overflow:hidden; }
+  .veil .blob{
+    position:absolute; border-radius:50%; filter:blur(70px); opacity:.55;
+    animation:float 22s ease-in-out infinite;
+  }
+  .veil .b1{ width:420px; height:420px; left:-120px; top:-140px; background:radial-gradient(circle, rgba(167,139,250,.30), transparent 70%); }
+  .veil .b2{ width:460px; height:460px; right:-160px; bottom:-160px; background:radial-gradient(circle, rgba(196,176,255,.22), transparent 70%); animation-delay:-9s; animation-duration:26s; }
+  .veil .b3{ width:300px; height:300px; right:10%; top:15%; background:radial-gradient(circle, rgba(109,91,153,.28), transparent 70%); animation-delay:-4s; animation-duration:19s; }
+  @keyframes float{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(24px,-18px) scale(1.08); }
+  }
+  .veil::after{
+    content:""; position:absolute; inset:0;
     background-image:linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size:54px 54px;
-    mask-image:radial-gradient(circle at 20% 10%, black, transparent 72%);
+    background-size:56px 56px;
+    mask-image:radial-gradient(circle at 50% 20%, black, transparent 70%);
     opacity:.4;
   }
 
-  ::selection{ background:rgba(167,139,250,.3); }
-  :focus-visible{ outline:2px solid var(--accent2); outline-offset:2px; }
+  .stage{ position:relative; z-index:1; width:100%; max-width:520px; padding:26px 20px 22px; display:flex; flex-direction:column; min-height:100dvh; }
 
-  /* ---------- shell ---------- */
-  .shell{
-    position:relative; z-index:1;
-    width:100%; max-width:1180px; margin:0 auto;
-    min-height:100dvh;
-    padding:18px 20px 16px;
-    display:flex; flex-direction:column;
-  }
-
-  .topbar{ display:flex; align-items:center; gap:12px; margin-bottom:22px; flex-shrink:0; }
+  /* ---------- header ---------- */
+  header.app-head{ display:flex; align-items:center; gap:12px; margin-bottom:24px; }
   .brand-mark{
-    width:38px; height:38px; border-radius:12px; flex-shrink:0;
-    background:linear-gradient(150deg, rgba(167,139,250,.20), rgba(167,139,250,.03));
+    width:42px; height:42px; border-radius:13px; flex-shrink:0;
+    background:linear-gradient(150deg, rgba(167,139,250,.22), rgba(167,139,250,.04));
     border:1px solid var(--border);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Noto Serif TC',serif; font-size:17px; color:var(--accent);
+    font-family:'Noto Serif TC',serif; font-size:19px; color:var(--accent);
   }
-  .topbar h1{ font-family:'Manrope',sans-serif; font-weight:800; font-size:14.5px; margin:0; }
-  .topbar small{ display:block; font-size:10.5px; color:var(--muted); margin-top:1px; font-weight:500; }
+  header h1{ font-family:'Manrope',sans-serif; font-weight:800; font-size:15.5px; margin:0; letter-spacing:.01em; }
+  header small{ display:block; font-size:11px; color:var(--muted); margin-top:1px; font-weight:500; }
 
-  .main-area{ flex:1; display:flex; min-height:0; }
-
-  section{ width:100%; }
-  #setup{ display:none; }
-  #setup.show{ display:flex; flex-direction:column; gap:22px; flex:1; }
-  #quiz{ display:none; }
-  #quiz.show{ display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
-
-  body.quiz-active .topbar{ display:none; }
-  @media (min-width:960px){ body.quiz-active .topbar{ display:flex; } }
+  /* ---------- shared panel ---------- */
+  .panel{ background:var(--card-bg); border:1px solid var(--border); border-radius:20px; }
 
   /* ================= SETUP ================= */
-  .g-intro h2{ font-family:'Manrope',sans-serif; font-size:22px; font-weight:800; margin:0 0 7px; }
-  .g-intro p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; max-width:46ch; }
+  #setup{ display:flex; flex-direction:column; gap:20px; flex:1; }
+  .setup-intro h2{ font-family:'Manrope',sans-serif; font-size:21px; font-weight:800; margin:0 0 6px; }
+  .setup-intro p{ margin:0; font-size:13px; color:var(--muted); line-height:1.55; }
 
-  .select-row{ display:flex; align-items:center; justify-content:space-between; margin:18px 0 10px; }
-  .select-row span{ font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.1em; }
+  .row-between{ display:flex; align-items:center; justify-content:space-between; }
   .chip-all{
-    border:1px solid var(--border); background:none; color:var(--accent2);
+    border:1px solid var(--border); background:var(--bg3); color:var(--accent2);
     font-family:'Inter',sans-serif; font-weight:600; font-size:12px;
-    padding:7px 13px; border-radius:999px; cursor:pointer; transition:border-color .15s var(--ease), color .15s var(--ease), background .15s var(--ease);
+    padding:8px 14px; border-radius:999px; cursor:pointer; transition:border-color .15s var(--ease), color .15s var(--ease);
   }
   .chip-all:hover{ border-color:var(--accent-dim); }
   .chip-all.active{ background:linear-gradient(120deg, var(--accent), var(--accent2)); color:#0d0d12; border-color:transparent; }
 
-  .cat-list{ display:flex; flex-direction:column; }
-  .cat-row{
-    display:flex; align-items:center; gap:16px;
-    padding:15px 8px 15px 12px;
-    border-bottom:1px solid var(--border);
-    border-left:3px solid transparent;
-    cursor:pointer; user-select:none;
-    transition:border-color .15s var(--ease), background .15s var(--ease);
+  .cat-grid{ display:flex; flex-direction:column; gap:12px; }
+
+  .cat-card{
+    padding:15px; display:flex; align-items:center; gap:14px; cursor:pointer; user-select:none;
+    transition:border-color .18s var(--ease), background .18s var(--ease), transform .12s var(--ease);
   }
-  .cat-row:last-child{ border-bottom:none; }
-  .cat-row.active{ border-left-color:var(--accent2); background:linear-gradient(90deg, rgba(167,139,250,.07), transparent); }
-  .cat-row .badge{
-    font-family:'Noto Serif TC',serif; font-size:19px; color:var(--accent-dim);
-    min-width:74px; letter-spacing:1.5px; transition:color .15s var(--ease);
+  .cat-card:active{ transform:scale(.985); }
+  .cat-card .badge{
+    width:56px; height:56px; border-radius:16px; flex-shrink:0;
+    background:var(--bg3); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Noto Serif TC',serif; font-size:16px; color:var(--accent-dim);
+    letter-spacing:1px; line-height:1.15; text-align:center; padding:2px;
+    transition:color .18s var(--ease), border-color .18s var(--ease);
   }
-  .cat-row.active .badge{ color:var(--accent); }
-  .cat-row .info{ flex:1; min-width:0; }
-  .cat-row .info .name{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14.5px; }
-  .cat-row .info .count{ font-size:11.5px; color:var(--muted); margin-top:2px; }
-  .cat-row .check{
-    width:20px; height:20px; border-radius:6px; border:1.5px solid var(--accent-dim);
+  .cat-card .info{ flex:1; min-width:0; }
+  .cat-card .info .name{ font-family:'Manrope',sans-serif; font-weight:700; font-size:14.5px; }
+  .cat-card .info .count{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .cat-card .check{
+    width:22px; height:22px; border-radius:7px; border:1.5px solid var(--accent-dim);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
     transition:background .15s var(--ease), border-color .15s var(--ease);
   }
-  .cat-row .check svg{ width:11px; height:11px; opacity:0; transition:opacity .12s var(--ease); }
-  .cat-row.active .check{ background:var(--accent2); border-color:var(--accent2); }
-  .cat-row.active .check svg{ opacity:1; }
+  .cat-card .check svg{ width:12px; height:12px; opacity:0; transition:opacity .12s var(--ease); }
+  .cat-card.active{ border-color:var(--accent-dim); background:linear-gradient(180deg, rgba(167,139,250,.08), rgba(167,139,250,.02)); }
+  .cat-card.active .badge{ color:var(--accent); border-color:var(--accent-dim); }
+  .cat-card.active .check{ background:var(--accent2); border-color:var(--accent2); }
+  .cat-card.active .check svg{ opacity:1; }
 
   .start-btn{
-    border:none; border-radius:16px; padding:16px; margin-top:auto;
-    font-family:'Manrope',sans-serif; font-weight:800; font-size:15px; letter-spacing:.02em; color:#0d0d12;
+    margin-top:auto; border:none; border-radius:16px; padding:16px; font-family:'Manrope',sans-serif;
+    font-weight:800; font-size:15px; letter-spacing:.02em; color:#0d0d12;
     background:linear-gradient(135deg, var(--accent), var(--accent2));
     cursor:pointer; transition:opacity .15s var(--ease), transform .1s var(--ease);
   }
   .start-btn:disabled{ opacity:.3; cursor:not-allowed; }
   .start-btn:not(:disabled):active{ transform:scale(.985); }
 
-  @media (min-width:960px){
-    #setup.show{
-      display:grid;
-      grid-template-columns:380px 1fr;
-      grid-template-areas:"intro cats" "start cats";
-      align-items:start; gap:10px 56px;
-    }
-    .g-intro{ grid-area:intro; }
-    .g-cats{ grid-area:cats; position:relative; }
-    .start-btn{ grid-area:start; margin-top:8px; max-width:380px; }
-    .g-intro p{ max-width:34ch; }
-    .g-intro h2{ font-size:28px; }
-  }
-
-  /* watermark on setup — desktop only */
-  .setup-wm{
-    position:absolute; right:-10px; top:-40px; z-index:-1;
-    font-family:'Noto Serif TC',serif; font-size:260px; line-height:1;
-    color:var(--accent); opacity:.045; letter-spacing:10px;
-    transform:rotate(-7deg); white-space:nowrap; pointer-events:none;
-    display:none;
-  }
-  @media (min-width:960px){ .setup-wm{ display:block; } }
-
   /* ================= QUIZ ================= */
-  .quiz-grid{ display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
+  #quiz{ display:none; flex-direction:column; flex:1; gap:16px; }
+  #quiz.show{ display:flex; }
+  #setup.hide{ display:none; }
 
-  .g-top{ display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+  .quiz-top{ display:flex; align-items:center; justify-content:space-between; }
   .back-btn{
     background:none; border:none; color:var(--muted); font-size:12.5px; font-family:'Inter',sans-serif;
     display:flex; align-items:center; gap:5px; cursor:pointer; padding:6px 0;
   }
   .back-btn:hover{ color:var(--text); }
 
-  .stats-inline{ display:flex; gap:16px; }
-  .si{ display:flex; align-items:center; gap:6px; font-family:'Manrope',sans-serif; font-weight:800; font-size:13.5px; }
-  .si .dot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-  .si.good .dot{ background:var(--good); } .si.good{ color:var(--good); }
-  .si.bad .dot{ background:var(--bad); } .si.bad{ color:var(--bad); }
-  .si.streak .dot{ background:var(--accent); } .si.streak{ color:var(--accent); }
-
-  .g-practice{
-    flex:1; min-height:0; position:relative;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:16px; padding:6px 0;
+  .badges{ display:flex; gap:8px; }
+  .badge-pill{
+    display:flex; align-items:center; gap:5px; padding:6px 11px; border-radius:999px;
+    background:var(--bg3); border:1px solid var(--border); font-family:'Manrope',sans-serif;
   }
+  .badge-pill .dot{ width:6px; height:6px; border-radius:50%; }
+  .badge-pill.good .dot{ background:var(--good); }
+  .badge-pill.bad .dot{ background:var(--bad); }
+  .badge-pill.streak .dot{ background:var(--accent); }
+  .badge-pill .n{ font-size:13px; font-weight:800; }
 
-  .watermark{
-    position:absolute; z-index:-1; pointer-events:none;
-    font-family:'Noto Serif TC',serif; color:var(--accent); opacity:.05;
-    font-size:min(60vw,300px); line-height:1; right:-6%; top:8%;
-    transform:rotate(-5deg); white-space:nowrap; display:none;
+  .card-wrap{ flex:1; display:flex; align-items:center; justify-content:center; padding:6px 0; }
+
+  /* the "tian zi ge" practice-sheet card: signature element */
+  .glyph-card{
+    position:relative; display:inline-flex; align-items:center; justify-content:center;
+    min-width:220px; min-height:220px; padding:10px;
+    border-radius:30px; border:1px solid var(--border);
+    background:radial-gradient(120% 120% at 50% 0%, rgba(167,139,250,.08), transparent 60%), var(--card-bg);
+    transition:border-color .2s var(--ease), box-shadow .3s var(--ease);
   }
-  @media (min-width:960px){ .watermark{ display:block; } }
-
-  .eyebrow{
-    font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  .glyph-card::before, .glyph-card::after{
+    content:""; position:absolute; pointer-events:none;
+    background:var(--border);
   }
-  body.kb-open .eyebrow{ display:none; }
-
-  .glyph-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; }
-  .glyph-display{
-    font-family:'Noto Serif TC',serif; color:var(--text); line-height:1; letter-spacing:1px;
-    font-size:clamp(48px, 19dvh, 168px);
-    opacity:0; transform:translateY(6px);
-    transition:opacity .18s var(--ease), transform .18s var(--ease);
+  .glyph-card::before{ left:50%; top:9%; bottom:9%; width:1px; transform:translateX(-.5px); }
+  .glyph-card::after{ top:50%; left:9%; right:9%; height:1px; transform:translateY(-.5px); }
+  .glyph-card .corner-frame{
+    position:absolute; inset:9%; border:1px solid var(--border); border-radius:14px; pointer-events:none;
   }
-  .glyph-display.combo{ font-size:clamp(32px, 13dvh, 100px); letter-spacing:3px; }
-  .glyph-display.in{ opacity:1; transform:translateY(0); }
-  body.kb-open .glyph-display{ font-size:44px !important; }
-  body.kb-open .glyph-display.combo{ font-size:34px !important; }
+  .glyph-card.pulse{ animation:pulse 2.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(167,139,250,0); } 50%{ box-shadow:0 0 34px 2px rgba(167,139,250,.10); } }
+  .glyph-card.correct{ border-color:var(--good); box-shadow:0 0 36px 4px rgba(127,227,172,.20); animation:none; }
+  .glyph-card.wrong{ border-color:var(--bad); box-shadow:0 0 36px 4px rgba(242,139,139,.18); animation:shake .3s var(--ease); }
+  @keyframes shake{ 20%{ transform:translateX(-6px); } 40%{ transform:translateX(5px); } 60%{ transform:translateX(-4px); } 80%{ transform:translateX(3px); } 100%{ transform:translateX(0); } }
 
-  .glyph-wrap.wrong{ animation:shake .28s var(--ease); }
-  @keyframes shake{ 20%{transform:translateX(-5px);} 40%{transform:translateX(4px);} 60%{transform:translateX(-3px);} 80%{transform:translateX(2px);} 100%{transform:translateX(0);} }
+  .glyph{
+    position:relative; font-family:'Noto Serif TC',serif; color:var(--text); line-height:1;
+    user-select:none; letter-spacing:1px;
+    font-size:clamp(70px, 24vw, 112px);
+    opacity:0; transform:translateY(6px) scale(.94);
+    transition:opacity .2s var(--ease), transform .2s var(--ease);
+  }
+  .glyph.combo{ font-size:clamp(46px, 16vw, 72px); letter-spacing:2px; }
+  .glyph.in{ opacity:1; transform:translateY(0) scale(1); }
 
-  .baseline{ width:110px; height:3px; border-radius:2px; background:var(--accent-dim); opacity:.32; transition:background .2s var(--ease), opacity .2s var(--ease), width .2s var(--ease); }
-  .glyph-wrap.correct .baseline{ background:var(--good); opacity:1; width:150px; }
-  .glyph-wrap.wrong .baseline{ background:var(--bad); opacity:1; width:150px; }
+  .status-icon{
+    position:absolute; top:-11px; right:-11px; width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.5); transition:opacity .16s var(--ease), transform .16s var(--ease);
+  }
+  .status-icon svg{ width:17px; height:17px; }
+  .status-icon.good{ background:var(--good); }
+  .status-icon.bad{ background:var(--bad); }
+  .status-icon.show{ opacity:1; transform:scale(1); }
 
-  .g-answer{ display:flex; flex-direction:column; align-items:center; gap:8px; flex-shrink:0; }
-  .answer-field{ display:flex; align-items:center; gap:10px; width:100%; max-width:260px; }
+  .answer-zone{ display:flex; flex-direction:column; gap:9px; }
+  .answer-row{
+    display:flex; align-items:center; gap:6px; background:var(--bg3);
+    border:1.5px solid var(--border); border-radius:999px; padding:6px 6px 6px 20px;
+    transition:border-color .15s var(--ease);
+  }
+  .answer-row.correct{ border-color:var(--good); }
+  .answer-row.wrong{ border-color:var(--bad); }
+
   #answer{
-    flex:1; min-width:0; background:none; border:none; border-bottom:2px solid var(--border);
-    padding:9px 4px; font-size:19px; text-align:center; font-family:'Manrope',sans-serif; font-weight:700;
-    color:var(--text); letter-spacing:.02em; outline:none; transition:border-color .15s var(--ease), color .15s var(--ease);
+    flex:1; background:none; border:none; outline:none; padding:9px 0;
+    font-size:16.5px; font-family:'Manrope',sans-serif; font-weight:700; color:var(--text); letter-spacing:.02em;
   }
-  #answer::placeholder{ color:var(--muted); font-weight:500; font-size:14px; }
-  .answer-field.correct #answer{ border-color:var(--good); color:var(--good); }
-  .answer-field.wrong #answer{ border-color:var(--bad); color:var(--bad); }
+  #answer::placeholder{ color:var(--muted); font-weight:500; }
+  .answer-row.correct #answer{ color:var(--good); }
+  .answer-row.wrong #answer{ color:var(--bad); }
 
-  .go-btn{
-    width:42px; height:42px; border-radius:50%; border:none; flex-shrink:0;
-    background:linear-gradient(135deg, var(--accent), var(--accent2)); color:#0d0d12;
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    transition:transform .1s var(--ease);
+  #submit{
+    border:none; border-radius:999px; padding:12px 20px; font-family:'Manrope',sans-serif;
+    font-weight:800; font-size:13.5px; color:#0d0d12;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    cursor:pointer; white-space:nowrap; transition:transform .1s var(--ease);
   }
-  .go-btn:active{ transform:scale(.9); }
-  .go-btn svg{ width:16px; height:16px; }
+  #submit:active{ transform:scale(.94); }
 
-  .feedback{ min-height:16px; font-size:12.5px; color:var(--muted); font-weight:600; }
+  .feedback{ min-height:18px; padding:0 6px; font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:5px; }
   .feedback.correct{ color:var(--good); }
   .feedback.wrong{ color:var(--bad); }
-  .feedback b{ font-family:'Manrope',sans-serif; font-weight:800; }
+  .feedback b{ font-family:'Manrope',sans-serif; letter-spacing:.02em; }
 
-  .g-utility{ display:flex; justify-content:space-between; align-items:center; flex-shrink:0; padding-top:2px; }
+  .util-row{ display:flex; justify-content:space-between; align-items:center; padding:0 4px; }
   .skip-btn, .end-btn{ background:none; border:none; color:var(--muted); font-size:12px; font-family:'Inter',sans-serif; cursor:pointer; padding:6px 2px; transition:color .15s var(--ease); }
   .skip-btn:hover, .end-btn:hover{ color:var(--text); }
-
-  .g-side{ display:none; }
-
-  @media (min-width:960px){
-    .quiz-grid{
-      display:grid;
-      grid-template-columns:1fr 250px;
-      grid-template-areas:"top top" "practice side" "answer side" "utility side";
-      gap:6px 60px; align-items:start;
-    }
-    .g-top{ grid-area:top; }
-    .g-practice{ grid-area:practice; min-height:380px; }
-    .g-answer{ grid-area:answer; align-items:center; }
-    .g-utility{ grid-area:utility; max-width:520px; }
-    .g-side{
-      grid-area:side; display:flex; flex-direction:column; gap:18px; padding-top:6px;
-    }
-    .side-stat .num{ font-family:'Manrope',sans-serif; font-weight:800; font-size:30px; line-height:1; }
-    .side-stat .lbl{ font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:3px; }
-    .side-stat.good .num{ color:var(--good); }
-    .side-stat.bad .num{ color:var(--bad); }
-    .side-stat.streak .num{ color:var(--accent); }
-    .side-divider{ height:1px; background:var(--border); margin:2px 0; }
-    .side-label{ font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-weight:700; }
-    .side-cats{ display:flex; flex-wrap:wrap; gap:6px; }
-    .side-chip{ font-size:11.5px; padding:5px 10px; border-radius:999px; border:1px solid var(--border); color:var(--accent2); }
-  }
 
   /* ================= RESULT ================= */
   #result{ display:none; position:fixed; inset:0; z-index:5; background:rgba(8,8,12,.72); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:24px; }
   #result.show{ display:flex; }
-  .result-card{ width:100%; max-width:360px; padding:26px 22px 22px; text-align:center; background:var(--card-bg); border:1px solid var(--border); border-radius:20px; }
+  .result-card{ width:100%; max-width:360px; padding:26px 22px 22px; text-align:center; }
   .result-card .glyph-mini{ font-family:'Noto Serif TC',serif; font-size:30px; color:var(--accent); margin-bottom:8px; }
   .result-card h3{ font-family:'Manrope',sans-serif; font-size:17px; margin:0 0 3px; }
   .result-card p.sub{ font-size:12px; color:var(--muted); margin:0 0 20px; }
@@ -280,18 +240,28 @@
   .result-stats .stat.bad .n{ color:var(--bad); }
   .again-btn{ width:100%; border:none; border-radius:14px; padding:14px; font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; color:#0d0d12; background:linear-gradient(135deg, var(--accent), var(--accent2)); cursor:pointer; }
 
+  ::selection{ background:rgba(167,139,250,.3); }
+  :focus-visible{ outline:2px solid var(--accent2); outline-offset:2px; }
+
+  @media (min-width:640px){
+    .stage{ padding-top:40px; }
+    .cat-grid{ flex-direction:row; }
+    .cat-card{ flex:1; flex-direction:column; text-align:center; gap:10px; padding:20px 14px; }
+    .cat-card .badge{ width:100%; height:64px; font-size:17px; }
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+    .veil .blob{ display:none; }
   }
 </style>
 </head>
 <body>
+<div class="veil"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 
-<div class="bg"><div class="wash"></div><div class="grid"></div></div>
+<div class="stage">
 
-<div class="shell">
-
-  <header class="topbar">
+  <header class="app-head">
     <div class="brand-mark">注</div>
     <div>
       <h1>Treino de Zhuyin</h1>
@@ -299,81 +269,68 @@
     </div>
   </header>
 
-  <div class="main-area">
+  <!-- SETUP -->
+  <section id="setup">
+    <div class="setup-intro">
+      <h2>O que você quer estudar?</h2>
+      <p>Escolha uma ou mais categorias. O símbolo aparece e você digita a leitura — ex: para ㄅ digite "b".</p>
+    </div>
 
-    <!-- SETUP -->
-    <section id="setup" class="show">
-      <div class="g-intro">
-        <h2>O que você quer estudar?</h2>
-        <p>Escolha uma ou mais categorias. O símbolo aparece e você digita a leitura — ex: para ㄅ digite "b".</p>
-        <div class="select-row">
-          <span>CATEGORIAS</span>
-          <button class="chip-all" id="allToggle" type="button">Selecionar tudo</button>
+    <div class="row-between">
+      <span style="font-size:11.5px; color:var(--muted); font-weight:600;">CATEGORIAS</span>
+      <button class="chip-all" id="allToggle" type="button">Selecionar tudo</button>
+    </div>
+
+    <div class="cat-grid" id="catGrid"></div>
+
+    <button class="start-btn" id="startBtn" disabled type="button">Começar treino</button>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="quiz-top">
+      <button class="back-btn" id="backBtn" type="button">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        categorias
+      </button>
+      <div class="badges">
+        <div class="badge-pill good"><span class="dot"></span><span class="n" id="statCorrect">0</span></div>
+        <div class="badge-pill bad"><span class="dot"></span><span class="n" id="statWrong">0</span></div>
+        <div class="badge-pill streak"><span class="dot"></span><span class="n" id="statStreak">0</span></div>
+      </div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="glyph-card pulse" id="glyphCard">
+        <div class="corner-frame"></div>
+        <div class="glyph" id="glyphText"></div>
+        <div class="status-icon good" id="iconGood">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0d0d12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="status-icon bad" id="iconBad">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0d0d12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </div>
       </div>
+    </div>
 
-      <div class="g-cats">
-        <div class="setup-wm">注音符號</div>
-        <div class="cat-list" id="catList"></div>
+    <div class="answer-zone">
+      <div class="answer-row" id="answerRow">
+        <input id="answer" type="text" placeholder="digite a leitura…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text">
+        <button id="submit" type="button">Verificar</button>
       </div>
-
-      <button class="start-btn" id="startBtn" disabled type="button">Começar treino</button>
-    </section>
-
-    <!-- QUIZ -->
-    <section id="quiz" class="quiz-grid">
-      <div class="g-top">
-        <button class="back-btn" id="backBtn" type="button">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-          categorias
-        </button>
-        <div class="stats-inline">
-          <span class="si good"><i class="dot"></i><b id="statCorrect">0</b></span>
-          <span class="si bad"><i class="dot"></i><b id="statWrong">0</b></span>
-          <span class="si streak"><i class="dot"></i><b id="statStreak">0</b></span>
-        </div>
-      </div>
-
-      <div class="g-practice">
-        <div class="watermark" id="watermark" aria-hidden="true"></div>
-        <div class="eyebrow" id="catLabel">CONSOANTE</div>
-        <div class="glyph-wrap" id="glyphWrap">
-          <div class="glyph-display" id="glyphText"></div>
-          <div class="baseline"></div>
-        </div>
-      </div>
-
-      <div class="g-answer">
-        <div class="answer-field" id="answerField">
-          <input id="answer" type="text" placeholder="sua leitura" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text" enterkeyhint="send">
-          <button class="go-btn" id="submit" type="button" aria-label="Verificar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <div class="feedback" id="feedback"></div>
-      </div>
-
-      <div class="g-utility">
+      <div class="feedback" id="feedback"></div>
+      <div class="util-row">
         <button class="skip-btn" id="skipBtn" type="button">pular →</button>
         <button class="end-btn" id="endBtn" type="button">encerrar sessão</button>
       </div>
+    </div>
+  </section>
 
-      <aside class="g-side">
-        <div class="side-stat good"><div class="num" id="panelCorrect">0</div><div class="lbl">acertos</div></div>
-        <div class="side-stat bad"><div class="num" id="panelWrong">0</div><div class="lbl">erros</div></div>
-        <div class="side-stat streak"><div class="num" id="panelStreak">0</div><div class="lbl">sequência</div></div>
-        <div class="side-divider"></div>
-        <div class="side-label">estudando</div>
-        <div class="side-cats" id="sideCats"></div>
-      </aside>
-    </section>
-
-  </div>
 </div>
 
 <!-- RESULT MODAL -->
 <div id="result">
-  <div class="result-card">
+  <div class="panel result-card">
     <div class="glyph-mini">注音</div>
     <h3>Sessão encerrada</h3>
     <p class="sub">veja como você foi</p>
@@ -444,9 +401,9 @@
   ];
 
   const CATEGORIES = [
-    { key:"consonants", name:"Consoantes",     label:"consoante",       sub:"聲母 · 21 símbolos",     sample:"ㄅㄆㄇㄈ", data:CONSONANTS },
-    { key:"vowels",     name:"Vogais simples", label:"vogal simples",   sub:"韻母 · 16 símbolos",     sample:"ㄚㄛㄜㄧ", data:VOWELS },
-    { key:"combos",     name:"Combos de vogais", label:"combo de vogais", sub:"結合韻母 · 20 símbolos", sample:"ㄧㄥㄨㄛ", data:COMBOS }
+    { key:"consonants", name:"Consoantes", sub:"聲母 · 21 símbolos", sample:"ㄅㄆㄇㄈ", data:CONSONANTS },
+    { key:"vowels",     name:"Vogais simples", sub:"韻母 · 16 símbolos", sample:"ㄚㄛㄜㄧ", data:VOWELS },
+    { key:"combos",     name:"Combos de vogais", sub:"結合韻母 · 20 símbolos", sample:"ㄧㄥㄨㄛ", data:COMBOS }
   ];
 
   /* ---------------- STATE ---------------- */
@@ -465,36 +422,23 @@
     return a;
   }
 
-  /* ---------------- keyboard-aware viewport watch ---------------- */
-  (function initKeyboardWatch(){
-    if(!window.visualViewport) return;
-    const vv = window.visualViewport;
-    function handle(){
-      const shrink = window.innerHeight - vv.height;
-      document.body.classList.toggle("kb-open", shrink > 140);
-    }
-    vv.addEventListener("resize", handle);
-    vv.addEventListener("scroll", handle);
-    handle();
-  })();
-
   /* ---------------- SETUP UI ---------------- */
-  const catList = document.getElementById("catList");
+  const catGrid = document.getElementById("catGrid");
   CATEGORIES.forEach(cat=>{
-    const row = document.createElement("div");
-    row.className = "cat-row";
-    row.dataset.key = cat.key;
-    row.innerHTML =
+    const card = document.createElement("div");
+    card.className = "cat-card panel";
+    card.dataset.key = cat.key;
+    card.innerHTML =
       '<div class="badge">'+cat.sample+'</div>'+
       '<div class="info"><div class="name">'+cat.name+'</div><div class="count">'+cat.sub+'</div></div>'+
       '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="#0d0d12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
-    row.addEventListener("click", ()=>{
-      if(selected.has(cat.key)){ selected.delete(cat.key); row.classList.remove("active"); }
-      else { selected.add(cat.key); row.classList.add("active"); }
+    card.addEventListener("click", ()=>{
+      if(selected.has(cat.key)){ selected.delete(cat.key); card.classList.remove("active"); }
+      else { selected.add(cat.key); card.classList.add("active"); }
       syncAllToggle();
       updateStartBtn();
     });
-    catList.appendChild(row);
+    catGrid.appendChild(card);
   });
 
   function syncAllToggle(){
@@ -504,9 +448,9 @@
 
   document.getElementById("allToggle").addEventListener("click", ()=>{
     const allSelected = selected.size === CATEGORIES.length;
-    document.querySelectorAll(".cat-row").forEach(row=>{
-      if(allSelected){ selected.delete(row.dataset.key); row.classList.remove("active"); }
-      else { selected.add(row.dataset.key); row.classList.add("active"); }
+    document.querySelectorAll(".cat-card").forEach(card=>{
+      if(allSelected){ selected.delete(card.dataset.key); card.classList.remove("active"); }
+      else { selected.add(card.dataset.key); card.classList.add("active"); }
     });
     syncAllToggle();
     updateStartBtn();
@@ -524,30 +468,19 @@
 
   function startSession(){
     pool = [];
-    const sideCats = document.getElementById("sideCats");
-    sideCats.innerHTML = "";
-    CATEGORIES.forEach(cat=>{
-      if(!selected.has(cat.key)) return;
-      pool = pool.concat(cat.data.map(item=>({ sym:item[0], ans:item[1], label:cat.label })));
-      const chip = document.createElement("span");
-      chip.className = "side-chip";
-      chip.textContent = cat.name;
-      sideCats.appendChild(chip);
-    });
+    CATEGORIES.forEach(cat=>{ if(selected.has(cat.key)) pool = pool.concat(cat.data); });
     queue = shuffle(pool);
     correctCount = 0; wrongCount = 0; streak = 0;
     updateStatBar();
-    document.body.classList.add("quiz-active");
-    setupEl.classList.remove("show");
+    setupEl.classList.add("hide");
     quizEl.classList.add("show");
     nextQuestion();
   }
 
   function endSession(showSummary){
     if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer = null; }
-    document.body.classList.remove("quiz-active");
     quizEl.classList.remove("show");
-    setupEl.classList.add("show");
+    setupEl.classList.remove("hide");
     if(showSummary){
       document.getElementById("rCorrect").textContent = correctCount;
       document.getElementById("rWrong").textContent = wrongCount;
@@ -558,11 +491,11 @@
   }
 
   /* ---------------- QUIZ LOGIC ---------------- */
-  const glyphWrap  = document.getElementById("glyphWrap");
+  const glyphCard  = document.getElementById("glyphCard");
   const glyphText  = document.getElementById("glyphText");
-  const catLabel   = document.getElementById("catLabel");
-  const watermark  = document.getElementById("watermark");
-  const answerField= document.getElementById("answerField");
+  const iconGood   = document.getElementById("iconGood");
+  const iconBad    = document.getElementById("iconBad");
+  const answerRow  = document.getElementById("answerRow");
   const input      = document.getElementById("answer");
   const feedback   = document.getElementById("feedback");
   const submitBtn  = document.getElementById("submit");
@@ -574,20 +507,23 @@
     answered = false;
     qToken++;
 
-    glyphWrap.classList.remove("correct","wrong");
-    answerField.classList.remove("correct","wrong");
+    glyphCard.classList.remove("correct","wrong");
+    glyphCard.classList.add("pulse");
+    iconGood.classList.remove("show");
+    iconBad.classList.remove("show");
+
+    answerRow.classList.remove("correct","wrong");
     input.value = "";
     input.disabled = false;
     feedback.textContent = "";
     feedback.className = "feedback";
+    submitBtn.textContent = "Verificar";
 
-    catLabel.textContent = current.label.toUpperCase();
-    watermark.textContent = current.sym;
-
-    const isCombo = current.sym.length > 1;
+    const isCombo = current[0].length > 1;
     glyphText.classList.remove("in");
     glyphText.classList.toggle("combo", isCombo);
-    glyphText.textContent = current.sym;
+    glyphText.textContent = current[0];
+    // force reflow so the fade-in transition retriggers
     void glyphText.offsetWidth;
     requestAnimationFrame(()=>glyphText.classList.add("in"));
 
@@ -600,41 +536,42 @@
     if(!raw) return;
 
     const guess = normalize(raw);
-    const accepted = current.ans.map(normalize);
+    const accepted = current[1].map(normalize);
     const isCorrect = accepted.includes(guess);
     const myToken = qToken;
 
     answered = true;
     input.disabled = true;
+    glyphCard.classList.remove("pulse");
 
     if(isCorrect){
       correctCount++; streak++;
-      glyphWrap.classList.add("correct");
-      answerField.classList.add("correct");
+      glyphCard.classList.add("correct");
+      answerRow.classList.add("correct");
+      iconGood.classList.add("show");
       feedback.className = "feedback correct";
-      feedback.innerHTML = "✓ certo — <b>"+current.ans[0]+"</b>";
+      feedback.innerHTML = "certo — <b>"+current[1][0]+"</b>";
     } else {
       wrongCount++; streak = 0;
-      glyphWrap.classList.add("wrong");
-      answerField.classList.add("wrong");
+      glyphCard.classList.add("wrong");
+      answerRow.classList.add("wrong");
+      iconBad.classList.add("show");
       feedback.className = "feedback wrong";
-      feedback.innerHTML = "✗ era — <b>"+current.ans.join(" / ")+"</b>";
+      feedback.innerHTML = "era — <b>"+current[1].join(" / ")+"</b>";
     }
 
     updateStatBar();
+    submitBtn.textContent = "Próximo →";
 
     pendingTimer = setTimeout(()=>{
       if(answered && qToken === myToken) nextQuestion();
-    }, isCorrect ? 420 : 720);
+    }, isCorrect ? 480 : 780);
   }
 
   function updateStatBar(){
     document.getElementById("statCorrect").textContent = correctCount;
     document.getElementById("statWrong").textContent = wrongCount;
     document.getElementById("statStreak").textContent = streak;
-    document.getElementById("panelCorrect").textContent = correctCount;
-    document.getElementById("panelWrong").textContent = wrongCount;
-    document.getElementById("panelStreak").textContent = streak;
   }
 
   submitBtn.addEventListener("click", checkAnswer);
